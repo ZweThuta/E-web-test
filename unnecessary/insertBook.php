@@ -1,17 +1,14 @@
 <?php
 require_once "dbconnect.php";
-$sql = "SELECT * FROM customers WHERE income >= 100000 order by income desc limit 20";
 try {
+    $sql = "select * from category";
     $stmt = $conn->query($sql);
-    $status = $stmt->execute();
-    if ($status) {
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+    $categories =  $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    echo $e->getMessage();
+    echo "" . $e->getMessage() . "";
 }
-
 ?>
+
 <!doctype html>
 <html lang="en">
 
@@ -25,7 +22,7 @@ try {
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <img class="navbar-brand" href="#">
-                <img src="./images/pingu.jpg" alt="title" style="width: 40px; height:auto;" ></img>Navbar</a>
+            <img src="./images/pingu.jpg" alt="title" style="width: 40px; height:auto;"></img>Navbar</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -54,45 +51,40 @@ try {
             </div>
         </div>
     </nav>
-    <title>Hello, world!</title>
+    <title>Insert Book</title>
 </head>
 
 <body>
-    <div class="container-fluid">
+    <div class="container-fluid pt-5 border">
         <div class="row">
-            <div class="col-md-2 bg-primary bg-light">Some links</div>
-            <div class="col-md-10 bg-secondary ">
-                <table class="table table-light">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Gender</th>
-                            <th>Income</th>
-                            <th>Martial</th>
-                            <th>Vehicles</th>
-                            <th>Age</th>
-                            <th>State</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        if (isset($rows)) {
-                            foreach ($rows as $row) {
-                                echo "<tr>
-                                <td>$row[custid]</td>
-                                <td>$row[sex]</td>
-                                <td>$row[income]</td>
-                                <td>$row[marital_stat]</td>
-                                <td>$row[num_vehicles]</td>
-                                <td>$row[age]</td>
-                                <td>$row[state]</td>
-                                </tr>";
+            <div class="col-md-2 col-sm 12 border bg-light">
+                Some links
+            </div>
+            <div class="col-md-10 col-sm 12 pt-5">
+                <form>
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" class="form-control" name="title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <input type="number" class="form-control" name="price" min="0">
+                    </div>
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Quantity</label>
+                        <input type="number" class="form-control" name="quantity" min="1">
+                    </div>
+                    <select class="form-select" name="category">
+                        <option selected>Select Categories</option>
+                        <?php if (isset($categories)) {
+                            foreach ($categories as $category) {
+                                echo "<option value=$category[category_id]>$category[category_name]</option>";
                             }
                         }
                         ?>
-                    </tbody>
-                </table>
-
+                    </select>
+                    <button type="submit" class="btn btn-primary mt-4">Submit</button>
+                </form>
             </div>
         </div>
     </div>
